@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
 using AppDistribuidorLucrosEntidades;
-using AppDistribuidorLucrosService;
 using AppDistribuidorLucrosService.Interfaces;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace AppDistribuidorLucrosAPI.Controllers
 {
@@ -14,34 +13,64 @@ namespace AppDistribuidorLucrosAPI.Controllers
     public class DistribuidorLucrosController : ControllerBase
     {
         private readonly ILogger<DistribuidorLucrosController> _logger;
-        private readonly IConfiguration _configuration;
         private readonly IDistribuidorLucrosService _distribuidorLucrosService;
 
-        public DistribuidorLucrosController(ILogger<DistribuidorLucrosController> logger, IConfiguration configuration, IDistribuidorLucrosService distribuidorLucrosService)
+        public DistribuidorLucrosController(ILogger<DistribuidorLucrosController> logger, IDistribuidorLucrosService distribuidorLucrosService)
         {
             _logger = logger;
-            _configuration = configuration;
             _distribuidorLucrosService = distribuidorLucrosService;
         }
 
         [HttpPost]
         [Route("api/CadastraFuncionarios")]
-        public void CadastraFuncionarios([FromBody] List<Funcionario> funcionarios)
+        public ActionResult CadastraFuncionarios([FromBody] List<Funcionario> funcionarios)
         {
-            //#if DEBUG
-            //    _redisHelper.ClearCache();
-            //#endif
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            //var cache = _redisHelper.Connection.GetDatabase();
+            foreach (var funcionario in funcionarios)
+            {
+                _distribuidorLucrosService.Add(funcionario);
+                _logger.LogInformation($"Adicionado ao cache : {funcionario.matricula + " " + funcionario.nome}");
+            }
 
-            //foreach (var funcionario in funcionarios)
-            //{
-            //    if (string.IsNullOrEmpty(cache.StringGet("Funcionarios" + funcionario.matricula)))
-            //    {
-            //        cache.StringSet("Funcionarios" + funcionario.matricula, JsonConvert.SerializeObject(funcionario));
-            //        _logger.LogInformation($"Added to cache : {funcionario.matricula + " " + funcionario.nome}");
-            //    }
-            //}
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/DescadastraFuncionarios")]
+        public ActionResult DescadastraFuncionarios([FromBody] List<Funcionario> funcionarios)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            foreach (var funcionario in funcionarios)
+            {
+                _distribuidorLucrosService.Remove(funcionario);
+                _logger.LogInformation($"Apagado do cache : {funcionario.matricula + " " + funcionario.nome}");
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/DistribuiParticipacao")]
+        public ActionResult<PagamentosConsolidados> DistribuiParticipacao(string totalDisponibilizado)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            decimal valor = decimal.Parse(totalDisponibilizado, NumberStyles.AllowCurrencySymbol | NumberStyles.Number);
+
+            var pagamentosCalculados = _distribuidorLucrosService.CalculaPagamentos(valor);
+
+            return Ok(pagamentosCalculados);
         }
     }
 }

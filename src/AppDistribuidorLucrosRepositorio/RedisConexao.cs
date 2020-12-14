@@ -26,10 +26,17 @@ namespace AppDistribuidorLucrosRepositorio
             }
         }
 
+        public IServer Server
+        {
+            get
+            {
+                return Connection.GetServer("redis-14280.c9.us-east-1-2.ec2.cloud.redislabs.com:14280"); ;
+            }
+        }
+
         public void ClearCache()
         {
-            var server = Connection.GetServer("redis-14280.c9.us-east-1-2.ec2.cloud.redislabs.com:14280");
-            server.FlushDatabase();
+            Server.FlushDatabase();
         }
     }
 }

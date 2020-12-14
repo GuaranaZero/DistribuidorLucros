@@ -1,3 +1,4 @@
+using AppDistribuidorLucrosRepositorio;
 using AppDistribuidorLucrosService;
 using AppDistribuidorLucrosService.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -24,7 +25,12 @@ namespace AppDistribuidorLucrosAPI
 
             services.AddSwaggerGen();
 
-            services.AddScoped<IDistribuidorLucrosService, DistribuidorLucrosService>();
+            services.AddSingleton<RedisConexao>(services =>
+            {
+                return new RedisConexao(Configuration.GetConnectionString("LabRedisBD"));
+            });
+
+            services.AddSingleton<IDistribuidorLucrosService, DistribuidorLucrosService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

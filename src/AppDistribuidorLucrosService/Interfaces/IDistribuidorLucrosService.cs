@@ -8,8 +8,9 @@ namespace AppDistribuidorLucrosService.Interfaces
     public interface IDistribuidorLucrosService
     {
         IEnumerable<Funcionario> GetAllItems();
-        Funcionario Add(Funcionario novoFuncionario);
+        void Add(Funcionario novoFuncionario);
         Funcionario GetById(string chave);
-        void Remove(string chave);
+        void Remove(Funcionario funcionario);
+        PagamentosConsolidados CalculaPagamentos(decimal totalDisponibilizado);
     }
 }
