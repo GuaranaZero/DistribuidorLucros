@@ -1,5 +1,7 @@
-﻿using AppDistribuidorLucrosEntidades;
+﻿using AppDistribuidorLucrosCore.Data;
+using AppDistribuidorLucrosEntidades;
 using AppDistribuidorLucrosService.Interfaces;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,8 +12,13 @@ namespace AppDistribuidorLucrosAPITeste
     internal class DistribuidorLucrosServiceFake : IDistribuidorLucrosService
     {
         private readonly List<Funcionario> _funcionarios;
-        public DistribuidorLucrosServiceFake()
+        IFuncionariosRepository _repository;
+
+        public DistribuidorLucrosServiceFake(IFuncionariosRepository funcionariosRepository)
         {
+            var mock = new Mock<IFuncionariosRepository>();
+            _repository = mock.Object;
+
             _funcionarios = new List<Funcionario>()
             {
                 new Funcionario() { matricula = "0009968", nome = "Victor Wilson", area = "Diretoria", cargo = "Diretor Financeiro", salario_bruto = "R$ 12.696,20", data_de_admissao = Convert.ToDateTime("2012-01-05") },
@@ -21,22 +28,12 @@ namespace AppDistribuidorLucrosAPITeste
             };
         }
 
-        public void Add(Funcionario novoFuncionario)
+        public void AdicionaFuncionario(Funcionario novoFuncionario)
         {
             _funcionarios.Add(novoFuncionario);
         }
 
-        public IEnumerable<Funcionario> GetAllItems()
-        {
-            return _funcionarios;
-        }
-
-        public Funcionario GetById(string chave)
-        {
-            return _funcionarios.Where(a => a.matricula == chave.Replace("Funcionario.", "")).FirstOrDefault();
-        }
-
-        public void Remove(Funcionario funcionario)
+        public void RemoveFuncionario(Funcionario funcionario)
         {
             var item = _funcionarios.First(a => a.matricula == funcionario.matricula);
             _funcionarios.Remove(item);
@@ -49,7 +46,7 @@ namespace AppDistribuidorLucrosAPITeste
 
             foreach (var funcionario in _funcionarios)
             {
-                participacoes.Add(new Participacao() { matricula = funcionario.matricula, nome = funcionario.nome, valor_da_participação = string.Format(CultureInfo.CurrentCulture, "R$ {0:#.###,##}", funcionario.bonus_calculado.ToString()) });
+                participacoes.Add(new Participacao() { matricula = funcionario.matricula, nome = funcionario.nome, valor_da_participacao = string.Format(CultureInfo.CurrentCulture, "R$ {0:#.###,##}", funcionario.bonus_calculado.ToString()) });
                 totalDistribuido += funcionario.bonus_calculado;
             }
 

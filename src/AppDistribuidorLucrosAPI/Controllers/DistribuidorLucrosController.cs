@@ -3,8 +3,10 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using AppDistribuidorLucrosEntidades;
 using AppDistribuidorLucrosService.Interfaces;
-using System.Text.RegularExpressions;
 using System.Globalization;
+using AppDistribuidorLucrosService;
+using System;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AppDistribuidorLucrosAPI.Controllers
 {
@@ -23,7 +25,7 @@ namespace AppDistribuidorLucrosAPI.Controllers
 
         [HttpPost]
         [Route("api/CadastraFuncionarios")]
-        public ActionResult CadastraFuncionarios([FromBody] List<Funcionario> funcionarios)
+        public ActionResult CadastraFuncionarios([BindRequired, FromBody] List<Funcionario> funcionarios)
         {
             if (!ModelState.IsValid)
             {
@@ -32,7 +34,7 @@ namespace AppDistribuidorLucrosAPI.Controllers
 
             foreach (var funcionario in funcionarios)
             {
-                _distribuidorLucrosService.Add(funcionario);
+                _distribuidorLucrosService.AdicionaFuncionario(funcionario);
                 _logger.LogInformation($"Adicionado ao cache : {funcionario.matricula + " " + funcionario.nome}");
             }
 
@@ -41,7 +43,7 @@ namespace AppDistribuidorLucrosAPI.Controllers
 
         [HttpPost]
         [Route("api/DescadastraFuncionarios")]
-        public ActionResult DescadastraFuncionarios([FromBody] List<Funcionario> funcionarios)
+        public ActionResult DescadastraFuncionarios([BindRequired, FromBody] List<Funcionario> funcionarios)
         {
             if (!ModelState.IsValid)
             {
@@ -50,7 +52,7 @@ namespace AppDistribuidorLucrosAPI.Controllers
 
             foreach (var funcionario in funcionarios)
             {
-                _distribuidorLucrosService.Remove(funcionario);
+                _distribuidorLucrosService.RemoveFuncionario(funcionario);
                 _logger.LogInformation($"Apagado do cache : {funcionario.matricula + " " + funcionario.nome}");
             }
 
@@ -59,7 +61,7 @@ namespace AppDistribuidorLucrosAPI.Controllers
 
         [HttpGet]
         [Route("api/DistribuiParticipacao")]
-        public ActionResult<PagamentosConsolidados> DistribuiParticipacao(string totalDisponibilizado)
+        public ActionResult<PagamentosConsolidados> DistribuiParticipacao([BindRequired, FromQuery]string totalDisponibilizado)
         {
             if (!ModelState.IsValid)
             {

@@ -15,14 +15,16 @@ namespace AppDistribuidorLucrosAPITeste
     {
         IDistribuidorLucrosService _service;
         DistribuidorLucrosController _controller;
-        ILogger<DistribuidorLucrosController> _logger;
 
         public DistribuidorLucrosAPIUnitTest()
         {
-            var mock = new Mock<ILogger<DistribuidorLucrosController>>();
-            ILogger<DistribuidorLucrosController> logger = mock.Object;
+            var mockLogger = new Mock<ILogger<DistribuidorLucrosController>>();
+            ILogger<DistribuidorLucrosController> logger = mockLogger.Object;
 
-            _service = new DistribuidorLucrosServiceFake();
+            var mockRepositorio = new Mock<IFuncionariosRepository>();
+            IFuncionariosRepository _repository = mockRepositorio.Object;
+
+            _service = new DistribuidorLucrosServiceFake(_repository);
             _controller = new DistribuidorLucrosController(logger, _service);
         }
 
@@ -79,6 +81,18 @@ namespace AppDistribuidorLucrosAPITeste
         {
             // Act
             var okResult = _controller.DistribuiParticipacao("R$ 5.812.891,20");
+            // Assert
+            Assert.IsType<OkObjectResult>(okResult.Result);
+        }
+
+        [Fact]
+        public void DistribuiParticipacaoBadRequest()
+        {
+            // Act
+            var okResult = _controller.DistribuiParticipacao("R$ 5.812.891,20");
+
+            _controller.ModelState.AddModelError("TotalDisponibilizado", "Required");
+
             // Assert
             Assert.IsType<OkObjectResult>(okResult.Result);
         }

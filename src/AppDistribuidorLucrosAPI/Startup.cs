@@ -1,11 +1,16 @@
+using AppDistribuidorLucrosCore.Data;
 using AppDistribuidorLucrosRepositorio;
 using AppDistribuidorLucrosService;
 using AppDistribuidorLucrosService.Interfaces;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace AppDistribuidorLucrosAPI
 {
@@ -25,12 +30,16 @@ namespace AppDistribuidorLucrosAPI
 
             services.AddSwaggerGen();
 
-            services.AddSingleton<RedisConexao>(services =>
+            services.AddSingleton<IRedisConexao, RedisConexao>(services =>
             {
-                return new RedisConexao(Configuration.GetConnectionString("LabRedisBD"));
+                return new RedisConexao(Configuration.GetConnectionString("LabRedisBD"), Configuration.GetSection("RedisEndPoints")
+                                                                                                      .Get<Dictionary<string, object>>()["LabRedisBD"]
+                                                                                                      .ToString());
             });
 
-            services.AddSingleton<IDistribuidorLucrosService, DistribuidorLucrosService>();
+            services.AddSingleton<IFuncionariosRepository, FuncionariosRepository>();
+
+            services.AddScoped<IDistribuidorLucrosService, DistribuidorLucrosService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +49,16 @@ namespace AppDistribuidorLucrosAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExceptionHandler(a => a.Run(async context =>
+            {
+                var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+                var exception = exceptionHandlerPathFeature.Error;
+
+                var result = JsonConvert.SerializeObject(new { error = exception.Message });
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(result);
+            }));
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>

@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppDistribuidorLucrosEntidades\AppDistribuidorLucrosEntidades.csproj" />
-    <ProjectReference Include="..\AppDistribuidorLucrosRepositorio\AppDistribuidorLucrosRepositorio.csproj" />
   </ItemGroup>
 
 </Project>

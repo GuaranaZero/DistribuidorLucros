@@ -22,6 +22,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppDistribuidorLucrosAPI\AppDistribuidorLucrosAPI.csproj" />
+    <ProjectReference Include="..\AppDistribuidorLucrosCore\AppDistribuidorLucrosCore.csproj" />
+    <ProjectReference Include="..\AppDistribuidorLucrosEntidades\AppDistribuidorLucrosEntidades.csproj" />
+    <ProjectReference Include="..\AppDistribuidorLucrosRepositorio\AppDistribuidorLucrosRepositorio.csproj" />
+    <ProjectReference Include="..\AppDistribuidorLucrosService\AppDistribuidorLucrosService.csproj" />
   </ItemGroup>
 
 </Project>

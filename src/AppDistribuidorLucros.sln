@@ -5,13 +5,15 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppDistribuidorLucrosAPI", "AppDistribuidorLucrosAPI\AppDistribuidorLucrosAPI.csproj", "{D4F908FF-244A-4F95-8F2C-898BED499301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDistribuidorLucrosTeste", "AppDistribuidorLucrosTeste\AppDistribuidorLucrosTeste.csproj", "{D511DBAA-797D-4600-9FBD-DC21224F47EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppDistribuidorLucrosTeste", "AppDistribuidorLucrosTeste\AppDistribuidorLucrosTeste.csproj", "{D511DBAA-797D-4600-9FBD-DC21224F47EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDistribuidorLucrosService", "AppDistribuidorLucrosService\AppDistribuidorLucrosService.csproj", "{0DAD72C8-4556-4B80-AAD1-3C894E45F352}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppDistribuidorLucrosService", "AppDistribuidorLucrosService\AppDistribuidorLucrosService.csproj", "{0DAD72C8-4556-4B80-AAD1-3C894E45F352}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDistribuidorLucrosEntidades", "AppDistribuidorLucrosEntidades\AppDistribuidorLucrosEntidades.csproj", "{4A79930D-139C-45BA-9920-9EA5F7BDA1E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppDistribuidorLucrosEntidades", "AppDistribuidorLucrosEntidades\AppDistribuidorLucrosEntidades.csproj", "{4A79930D-139C-45BA-9920-9EA5F7BDA1E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDistribuidorLucrosRepositorio", "AppDistribuidorLucrosRepositorio\AppDistribuidorLucrosRepositorio.csproj", "{974F9D19-B47F-4077-BF09-144A4DC62746}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppDistribuidorLucrosRepositorio", "AppDistribuidorLucrosRepositorio\AppDistribuidorLucrosRepositorio.csproj", "{974F9D19-B47F-4077-BF09-144A4DC62746}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDistribuidorLucrosCore", "AppDistribuidorLucrosCore\AppDistribuidorLucrosCore.csproj", "{82AE1403-8CB4-43B5-9678-F45484459FB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{974F9D19-B47F-4077-BF09-144A4DC62746}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{974F9D19-B47F-4077-BF09-144A4DC62746}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{974F9D19-B47F-4077-BF09-144A4DC62746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82AE1403-8CB4-43B5-9678-F45484459FB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82AE1403-8CB4-43B5-9678-F45484459FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82AE1403-8CB4-43B5-9678-F45484459FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82AE1403-8CB4-43B5-9678-F45484459FB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
