@@ -1,6 +1,7 @@
 using AppDistribuidorLucrosAPI.Controllers;
 using AppDistribuidorLucrosEntidades;
 using AppDistribuidorLucrosService.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -77,6 +78,22 @@ namespace AppDistribuidorLucrosAPITeste
         }
 
         [Fact]
+        public void DescadastraFuncionariosBadRequest()
+        {
+            var _funcionarios = new List<Funcionario>()
+            {
+                new Funcionario() { nome = "Cross Perkins", area = "Relacionamento com o Cliente", cargo = "Líder de Ouvidoria", salario_bruto = "R$ 3.371,47", data_de_admissao = Convert.ToDateTime("2016-12-06") },
+                new Funcionario() { nome = "Taylor Mccarthy", area = "Relacionamento com o Cliente", cargo = "Auxiliar de Ouvidoria", salario_bruto = "R$ 1.800,16", data_de_admissao = Convert.ToDateTime("2017-03-31") }
+            };
+            _controller.ModelState.AddModelError("matricula", "Required");
+
+            // Act
+            var badResponse = _controller.DescadastraFuncionarios(_funcionarios);
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(badResponse);
+        }
+
+        [Fact]
         public void DistribuiParticipacaoOkResult()
         {
             // Act
@@ -89,12 +106,10 @@ namespace AppDistribuidorLucrosAPITeste
         public void DistribuiParticipacaoBadRequest()
         {
             // Act
-            var okResult = _controller.DistribuiParticipacao("R$ 5.812.891,20");
-
-            _controller.ModelState.AddModelError("TotalDisponibilizado", "Required");
+            var badResponse = _controller.DistribuiParticipacao("xxxx");
 
             // Assert
-            Assert.IsType<OkObjectResult>(okResult.Result);
+            Assert.IsType<BadRequestResult>(badResponse.Result);
         }
     }
 }

@@ -17,7 +17,7 @@ O restante das bibliotecas externas utilizadas por este projeto podem ser obtida
 
 Ao executar a aplicacao, será exibida via browser a interface do usuário do Swagger, contendo a documentação de todas as API's disponíveis no projeto, conforme imagem abaixo:
 
-<a href="https://ibb.co/ZdwcV0M"><img src="https://i.ibb.co/4WD47HV/Swagger-API.png" alt="Swagger-API" border="0"></a>
+<img src="https://i.ibb.co/4WD47HV/Swagger-API.png" alt="Swagger-API" border="0">
 
 ## Uso
 
@@ -70,6 +70,7 @@ Esta aplicação possui três endPoints os quais são necessários para o gerenc
   "saldo_total_disponibilizado": "string"
 }
 ```
+  - Caso o montante disponibilizado não seja o suficiente para distribuir entre todos os funcionários, a API retornará o cálculo de quanto cada funcionário deveria receber, porém o campo total_distribuido será igual a zero, indicando que não foi possível realizar o pagamento.
 
 Caso haja algum erro durante o processamento das requisições será retornado erro 500 e, por exemplo, a mensagem abaixo:
 

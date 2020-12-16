@@ -7,6 +7,7 @@ using System.Globalization;
 using AppDistribuidorLucrosService;
 using System;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Net;
 
 namespace AppDistribuidorLucrosAPI.Controllers
 {
@@ -63,12 +64,12 @@ namespace AppDistribuidorLucrosAPI.Controllers
         [Route("api/DistribuiParticipacao")]
         public ActionResult<PagamentosConsolidados> DistribuiParticipacao([BindRequired, FromQuery]string totalDisponibilizado)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            decimal valor;
 
-            decimal valor = decimal.Parse(totalDisponibilizado, NumberStyles.AllowCurrencySymbol | NumberStyles.Number);
+            if (!decimal.TryParse(totalDisponibilizado, NumberStyles.AllowCurrencySymbol | NumberStyles.Number, null, out valor))
+            {
+                return BadRequest();
+            }
 
             var pagamentosCalculados = _distribuidorLucrosService.CalculaPagamentos(valor);
 
