@@ -9,11 +9,9 @@ Todos estes processos são executados via chamadas a API's REST.
 
 ## Pre requistos
 
-Microsoft .NETCore 3.1 
+[Microsoft .NETCore 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 
-https://dotnet.microsoft.com/download/dotnet-core/3.1
-
-O restante das bibliotecas externas utilizadas por este projeto podem ser obtidas via nuget. A restauração destes pacotes é feita automaticamente ao executar os comandos [dotnet build] e [dotnet run]. 
+O restante das bibliotecas externas utilizadas por este projeto podem ser obtidas via nuget. A restauração destes pacotes é feita automaticamente ao executar os comandos `dotnet build` e `dotnet run`. 
 
 ## Execucao
 
@@ -25,6 +23,7 @@ Esta aplicação possui três endPoints os quais são necessários para o gerenc
 
 [POST] /DistribuidorLucros/api/CadastraFuncionarios - Esta API realiza o cadastro de um ou mais funcionários a partir do schema abaixo:
 
+```json
 [
   {
     "matricula": "string",
@@ -35,9 +34,11 @@ Esta aplicação possui três endPoints os quais são necessários para o gerenc
     "data_de_admissao": "2020-12-16T01:17:02.369Z"
   }
 ]
+```
 
 [POST] /DistribuidorLucros/api//DistribuidorLucros/api/DescadastraFuncionarios - Esta API descadastra um ou mais funcionários previamente cadastrados no sistema a partir do schema abaixo:
 
+```json
 [
   {
     "matricula": "string",
@@ -48,9 +49,11 @@ Esta aplicação possui três endPoints os quais são necessários para o gerenc
     "data_de_admissao": "2020-12-16T01:17:02.369Z"
   }
 ]
+```
 
 [GET] /DistribuidorLucros/api/DistribuiParticipacao - Esta chamada de API recebe como parâmetro uma string contendo o montante (ex: "R$ 5.812.891,20") que será dividido entre os funcionários cadastrados e retorna o resultado desta divisão de acordo com o schema abaixo:
 
+```json
 {
   "participacoes": [
     {
@@ -64,15 +67,19 @@ Esta aplicação possui três endPoints os quais são necessários para o gerenc
   "total_disponibilizado": "string",
   "saldo_total_disponibilizado": "string"
 }
+```
 
 Caso haja algum erro durante o processamento das requisições será retornado erro 500 e, por exemplo, a mensagem abaixo:
 
+```json
 {
 	"error":"Input string was not in a correct format."
 }
+```
 
 Caso, se trate de um erro conhecido e tratado pela aplicacao, sera retornado o erro 400, conforme exemplo abaixo:
 
+```json
 {
   "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
   "title": "One or more validation errors occurred.",
@@ -84,6 +91,7 @@ Caso, se trate de um erro conhecido e tratado pela aplicacao, sera retornado o e
     ]
   }
 }
+```
 
 ## Testes
 
