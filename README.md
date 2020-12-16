@@ -17,6 +17,8 @@ O restante das bibliotecas externas utilizadas por este projeto podem ser obtida
 
 Ao executar a aplicacao, será exibida via browser a interface do usuário do Swagger, contendo a documentação de todas as API's disponíveis no projeto, conforme imagem abaixo:
 
+<a href="https://ibb.co/ZdwcV0M"><img src="https://i.ibb.co/4WD47HV/Swagger-API.png" alt="Swagger-API" border="0"></a>
+
 ## Uso
 
 Esta aplicação possui três endPoints os quais são necessários para o gerenciamento dos funcionários da empresa e a geração de um JSON contendo o resultado da distribuição dos lucros.
