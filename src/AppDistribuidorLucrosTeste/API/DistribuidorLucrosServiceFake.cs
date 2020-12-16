@@ -13,6 +13,7 @@ namespace AppDistribuidorLucrosAPITeste
     {
         private readonly List<Funcionario> _funcionarios;
         IFuncionariosRepository _repository;
+        private const decimal _salarioMinimo = 1045.00m;
 
         public DistribuidorLucrosServiceFake(IFuncionariosRepository funcionariosRepository)
         {
@@ -46,6 +47,12 @@ namespace AppDistribuidorLucrosAPITeste
 
             foreach (var funcionario in _funcionarios)
             {
+                int pesoArea = ObtemPesoAreaAtuacao(funcionario.area);
+                int pesoDataAdmissao = CalculaPesoDataAdmissao(funcionario.data_de_admissao);
+                int pesoFaixaSalarial = CalculaPesoFaixaSalarial(funcionario.salario_bruto, funcionario.cargo);
+
+                funcionario.bonus_calculado = CalculaBonusFuncionario(funcionario.salario_bruto, pesoDataAdmissao, pesoArea, pesoFaixaSalarial);
+
                 participacoes.Add(new Participacao() { matricula = funcionario.matricula, nome = funcionario.nome, valor_da_participacao = string.Format(CultureInfo.CurrentCulture, "R$ {0:#.###,##}", funcionario.bonus_calculado.ToString()) });
                 totalDistribuido += funcionario.bonus_calculado;
             }
@@ -60,6 +67,56 @@ namespace AppDistribuidorLucrosAPITeste
             };
 
             return pagamentosConsolidados;
+        }
+
+        private decimal CalculaBonusFuncionario(string salarioBruto, int pesoDataAdmissao, int pesoAreaAtuacao, int pesoFaixaSalarial)
+        {
+            Decimal salarioBruno = decimal.Parse(salarioBruto, NumberStyles.AllowCurrencySymbol | NumberStyles.Number);
+
+            decimal bonus = (((salarioBruno * pesoDataAdmissao) + (salarioBruno * pesoAreaAtuacao)) / pesoFaixaSalarial) * 12;
+            return bonus;
+        }
+
+        private int ObtemPesoAreaAtuacao(string area)
+        {
+            AreaList areaList = new AreaList();
+
+            return areaList.areas.Where(c => c.nome.ToUpper() == area.ToUpper())
+                                 .DefaultIfEmpty(new Area() { peso = 1 })
+                                 .FirstOrDefault()
+                                 .peso;
+        }
+
+        private int CalculaPesoDataAdmissao(DateTime dataAdmissao)
+        {
+            int anoDiff = (dataAdmissao.Year - DateTime.Now.Year - 1) +
+                          (((dataAdmissao.Month > DateTime.Now.Month) ||
+                          ((dataAdmissao.Month == DateTime.Now.Month) && (dataAdmissao.Day >= DateTime.Now.Day))) ? 1 : 0);
+
+            if (anoDiff <= 1)
+                return 1;
+            else if (anoDiff > 1 && anoDiff <= 3)
+                return 2;
+            else if (anoDiff > 3 && anoDiff <= 8)
+                return 3;
+            else //> 8
+                return 5;
+        }
+
+        private int CalculaPesoFaixaSalarial(string salarioBruto, string cargo)
+        {
+            Decimal salarioBruno = decimal.Parse(salarioBruto, NumberStyles.AllowCurrencySymbol | NumberStyles.Number);
+
+            int quantidadeSalarioMinimos = (int)decimal.Round(salarioBruno / _salarioMinimo, 0, MidpointRounding.ToZero);
+
+            if (quantidadeSalarioMinimos <= 3 || cargo.ToUpper().Trim() == "ESTÁGIARIO")
+                return 1;
+            else if (quantidadeSalarioMinimos > 3 && quantidadeSalarioMinimos <= 5)
+                return 2;
+            else if (quantidadeSalarioMinimos > 5 && quantidadeSalarioMinimos <= 8)
+                return 3;
+            else // >8
+                return 5;
         }
     }
 }
